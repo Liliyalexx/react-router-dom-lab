@@ -1,38 +1,57 @@
+// src/components/MailboxForm/MailboxForm.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const MailboxForm = ({addBox}) => {
-    const [formData, setFormData] = useState({
-       boxOwner: '',
-       boxSize: 'Small'
+const MailboxForm = ({ addBox }) => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    boxOwner: '',
+    boxSize: 'Small',
+  });
 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
+  };
 
-    const navigate = useNavigate();
-    const handleSubmit = (evt) => {
-        evt.preventDefault();
-        addBox(formData);
-        navigate('/mailboxes');
-    }
-    return (
-        <form onSubmit={handleSubmit}>
-            <input 
-            value={formData.boxOwner}
-            onChange = {(e) => setFormData({...formData, boxOwner:e.target.value})}
-            placeholder="Owner name"
-            required
-            />
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addBox(formData);
+    navigate('/mailboxes');
+  };
 
-            <select
-            value={formData.boxSize}
-            onChange = {(e) => setFormData({...formData, boxSize:e.target.value})}
-            >
-                <option value="Small">Small</option>
-                <option value="Medium">Medium</option>
-                <option value="Large">Large</option>
-            </select>
-            <button type="submit">Create Mailbox</button>
-        </form>
-    )
-}   
+  return (
+    <div className="mail-box">
+      <h2>Create New Mailbox</h2>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="boxOwner">Owner Name:</label>
+        <input
+          type="text"
+          id="boxOwner"
+          name="boxOwner"
+          value={formData.boxOwner}
+          onChange={handleChange}
+          required
+        />
+
+        <label htmlFor="boxSize">Box Size:</label>
+        <select
+          id="boxSize"
+          name="boxSize"
+          value={formData.boxSize}
+          onChange={handleChange}
+        >
+          <option value="Small">Small</option>
+          <option value="Medium">Medium</option>
+          <option value="Large">Large</option>
+        </select>
+
+        <button type="submit">Create Mailbox</button>
+      </form>
+    </div>
+  );
+};
+
 export default MailboxForm;
